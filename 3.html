@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Mars Data</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+  <link rel="stylesheet" href="">
+
+</head>
+
+<style>
+  .jumbotron {
+    posistion:relative;
+    z-index: 5;
+    box-shadow: 0 8px 16px -6px black;
+  }
+  .name {
+    font-weight: 600;
+    text-align:left;
+  }
+  #news {
+    padding-right: 40px;
+    margin-right: 45px;
+  }
+  #weather {
+    border-radius: 10px;
+    posistion:relative;
+    z-index: 2;
+    box-shadow: 0 8px 16px -6px black;
+  }
+  .title {
+    margin-bottom: 18px;
+    font-size: 45px;
+    font-weight: 500;
+  }
+  .title2 {
+    text-align: center;
+    margin-bottom: 18px;
+    font-size: 20px;
+    font-weight: 600;
+  }
+  hr.news {
+    border: 3px solid rgb(180, 179, 179);
+  }
+  th, td {
+    padding: 10px;
+    text-align: left;
+  }
+  tr:nth-child(even) {background-color: #f2f2f2;}
+  table {
+    border: 3px solid rgb(185, 184, 184);
+    margin-top: 0px;
+    width: 100%;
+  }
+  .tablebox{
+    padding: 15px;
+    border-radius: 10px;
+    posistion:relative;
+    z-index: 2;
+    box-shadow: 0 7px 18px -5px black;
+  }
+  th {
+    color: black;
+    font-weight: 600;
+    font-size: 18px;
+  }
+  .featured {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 100%;
+    height: auto;
+  }
+  img:hover {
+    box-shadow: 0 0 8px 5px rgba(136, 136, 138, 0.5);
+  }
+  .title3 {
+    margin-top: 30px;
+    margin-bottom: 30px;
+  }
+  .footer{
+    min-height: 60px;
+    background-color: rgb(233, 230, 230); 
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    margin-bottom: 0px;
+    margin-top: 10px;
+  }
+</style>
+
+<body>
+  <div class="container">
+    <div class="jumbotron p-4 mb-20" style="background-image: url(/static/img/mars_landing.jpg); background-size: cover; color: white; min-height: 500px">
+      <h1 class="display-4 name">MISSION TO MARS</h1>
+      <hr style="height:2px;border-width:0;background-color:white" class="my-4">
+      <div class="text-right"> 
+        <p>Please execute Scrape to get the latest news and updates.</p>
+       	<a class="btn btn-outline-light pull-right" href="/scrape" role="button">SCRAPE</a>
+      </div>	
+    </div>
+    <br>
+ 
+    <!-- Mars Data -->
+    <div class="row">
+      <div class="col-lg-8 col-md-8 col-sm-8 col-xs-12" id="news">
+        <h2 class="title display-5">Mars News</h2>
+        <hr class="news">
+        <p class="lead title2">{{mars_stuff.news_title}}</p>
+        <p style='margin-bottom: 25px;list-style: height 1.6em; text-align: justify; color: rgb(87, 86, 86);'>{{mars_stuff.news_paragraph}}</p>
+        <div class="text-center">
+        <a class="btn btn-outline-dark btn-md" href={{mars_stuff.news_url}} role="button">Learn more</a>
+        </div>
+        <hr class="news">
+      </div>
+      <div class="card" id="weather" style="width: 20rem" align="center">
+          <div class="card-body">
+            <h3 class="card-title">Current Mars Weather</h3>
+            <hr>
+            <p class="card-text" style='line-height:1.9; text-align: left;'>{{mars_stuff.weather}}</p>
+            <br>
+            <i class='fas fa-temperature-high' style='font-size:24px'></i>
+            <i class="fas fa-cloud" style='font-size:24px'></i>
+            <i class="fas fa-wind" style='font-size:24px'></i>
+          </div>
+      </div>
+    </div>
+    <br>
+
+    <div class="row" style="margin-top: 25px;">
+      <div class="col-md-5" style="padding-top: 50px; padding-right: 15px; margin-right: 50px;">
+        <div class="tablebox">
+          <h3 class="panel-title" style="text-align: center;">Mars Facts</h3>
+          <hr>
+          <table>{{ mars_stuff.facts|safe }}</table>
+        </div>
+      </div>
+      <div class="col-md-6" style="padding-top: 50px; margin-left: 45px; padding-right: 0px; padding-left: 0px;">
+        <h2 class="title display-5">Featured Mars Image</h2>
+        <hr class="news">
+        <div class="thumbnail pic" style="margin-top: 29px;margin-bottom: 29px;">
+          <a href={{ mars_stuff.featured_image_url }}>
+          <img src= {{ mars_stuff.featured_image_url }} alt="Featured Image" class="img-thumbnail featured"></a>
+        </div>
+        <hr class="news">
+      </div>
+    </div>
+    <br>
+
+    <div class="container-fluid" style="padding-top: 50px; margin-top: 25px; margin-bottom: 180px;">
+      <h2 class="text-center title">Mars Hemispheres</h2>
+      <hr class="news">
+      <div class="row" style="margin-top: 30px;">
+        <div class="col-md-3">
+          <div class="thumbnail">
+            <a href={{ mars_stuff.hemisphere_img_url.0.image_url }}>
+            <img src= {{ mars_stuff.hemisphere_img_url.0.image_url }} alt="Cerberus" class="img-thumbnail"></a>
+          </div>
+          <div class="caption">
+            <h5 class="text-center title3">{{ mars_stuff.hemisphere_img_url.0.title }}</h5>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="thumbnail">
+            <a href={{ mars_stuff.hemisphere_img_url.1.image_url }}>
+            <img src= {{ mars_stuff.hemisphere_img_url.1.image_url }} alt="Schiaparelli" class="img-thumbnail"></a>
+          </div>
+          <div class="caption">
+            <h5 class="text-center title3">{{ mars_stuff.hemisphere_img_url.1.title }}</h5>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="thumbnail">
+            <a href={{ mars_stuff.hemisphere_img_url.2.image_url }}>
+            <img src= {{ mars_stuff.hemisphere_img_url.2.image_url }} alt="Syrtis" class="img-thumbnail"></a>
+          </div>
+          <div class="caption">
+            <h5 class="text-center title3">{{ mars_stuff.hemisphere_img_url.2.title }}</h5>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="thumbnail">
+            <a href={{ mars_stuff.hemisphere_img_url.3.image_url }}>
+            <img src= {{ mars_stuff.hemisphere_img_url.3.image_url }} alt="Valles" class="img-thumbnail"></a>
+          </div>
+          <div class="caption">
+            <h5 class="text-center title3">{{ mars_stuff.hemisphere_img_url.3.title }}</h5>
+          </div>
+        </div>
+      </div>
+      <hr class="news">
+    </div>
+  </div>
+  <footer>
+    <p class="footer"></p>
+  </footer>
+</body>
+
+</html>
