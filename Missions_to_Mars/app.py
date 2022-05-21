@@ -16,8 +16,6 @@ app = Flask(__name__)
 #################################################
 # PyMongo Connection Setup
 #################################################
-#mongo = PyMongo(app=app,uri = "mongodb://localhost:27017/mars_app")
-# setup mongo connection
 conn = "mongodb://localhost:27017"
 client = pymongo.MongoClient(conn)
 
