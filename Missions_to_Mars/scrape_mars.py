@@ -16,9 +16,11 @@ import pymongo
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 
+
 def init_browser():
 	executable_path = {"executable_path":"webdriver/chromedriver"}
 	return Browser("chrome", **executable_path, headless = False)
+
 
 def mars_news(): 
     # connect to NASA Mars news Site
@@ -29,43 +31,32 @@ def mars_news():
 
     response = requests.get(url)
 
-    html=browser.html
     # Create BeautifulSoup object; parse with 'html.parser'
+    html=browser.html
     soup = BeautifulSoup(html, 'html.parser')
-
-    # Examine the results, determine elements that contains sought info.
-    #print(soup.prettify())
 
     article = soup.find("div", class_ = "list_text")
     news_title = article.find("div", class_="content_title").text
     news_p = article.find("div", class_="article_teaser_body").text
-
-#     print(f'------------------------------------------------')
-#     print(f'TITLE: {news_title}')
-#     print(f'------------------------------------------------')
-#     print(f'PARAGRAPH: {news_p}')
-     
     return news_title, news_p
 
 
 # JPL Mars Space Images 
 def featured_image():
-    # Visit the url for JPL Featured Space Image
-    # Set URL
+    # Visit and set url
     url = 'https://spaceimages-mars.com/'
     browser.visit(url)
 
-    html=browser.html
     # Create BeautifulSoup object; parse with 'html.parser'
+    html=browser.html
     soup = BeautifulSoup(html, 'html.parser')
 
     # Use splinter to navigate the site and find the image url for the current Featured Mars Image 
     browser.find_by_css("a.showimg").first.click()
     time.sleep(2)
 
-    #parse html page with BeautifulSoup
-    html=browser.html
     # Create BeautifulSoup object; parse with 'html.parser'
+    html=browser.html
     soup = BeautifulSoup(html, 'html.parser')
 
     # Need more info to find image url
@@ -74,14 +65,12 @@ def featured_image():
 
 
 def mars_facts():
-    # Visit the Mars Facts webpage
-    # Set URL
+    # Visit and set url
     url = 'https://galaxyfacts-mars.com/'
     browser.visit(url)
 
     # Use Pandas to scrape the table containing facts about the planet including Diameter, Mass, etc.
     mars_facts_df = pd.read_html("https://space-facts.com/mars/")[0]
-    #print(mars_facts_df)
 
     # Clean up DataFrame, set index
     mars_facts_df.columns=["Planet Profile", "Value"]
@@ -93,15 +82,13 @@ def mars_facts():
 
 # Mars Hemispheres
 def hemisphere_image_urls():
-    # Visit the Astrogeology site
-    # Set URL
+    # Visit and set url
     url = 'https://marshemispheres.com/'
     browser.visit(url)
 
     # Parse Results HTML with BeautifulSoup
     html = browser.html
     mars_weather_soup = BeautifulSoup(html, "html.parser")
-
 
     # Save both the image url string for the full resolution hemisphere image, 
     # and the Hemisphere title containing the hemisphere name
@@ -135,12 +122,8 @@ def hemisphere_image_urls():
 # Scrape All
 def scrape_all():
     # Initiate headless driver for deployment
-#     executable_path = {"executable_path": "chromedriver"}
     browser = Browser("chrome", **executable_path, headless=False)
     news_title, news_p = mars_news()
-#     image_url = featured_image()
-#     mars_facts_df = mars_facts()
-#     hemisphere_img_urls = hemisphere_img_urls()
 
      # Run all scraping functions and store results in a dictionary
     mars_data = {
