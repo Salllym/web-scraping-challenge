@@ -170,3 +170,9 @@ collection = db.mars
 
 # Dictionary to be inserted as a MongoDB document
 collection.insert_one(mars_data)
+
+# Display items in MongoDB collection
+listings = db.mars.find()
+
+for listing in listings:
+    print(listing)
