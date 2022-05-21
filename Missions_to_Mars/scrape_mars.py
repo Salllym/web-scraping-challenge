@@ -157,6 +157,7 @@ def scrape_all():
 
     return mars_data
 mars_data = scrape_all() 
+mars_data
 
 
 # Initialize PyMongo to work with MongoDBs
