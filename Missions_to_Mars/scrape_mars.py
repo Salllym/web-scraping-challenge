@@ -17,9 +17,8 @@ from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 
 
-def init_browser():
-	executable_path = {"executable_path":"webdriver/chromedriver"}
-	return Browser("chrome", **executable_path, headless = False)
+executable_path = {'executable_path': ChromeDriverManager().install()}
+browser = Browser('chrome', **executable_path, headless=False)
 
 
 def mars_news(): 
@@ -136,4 +135,15 @@ def scrape_all():
     browser.quit()
     return mars_data
 
+mars_data = scrape_all() 
 
+# Initialize PyMongo to work with MongoDBs
+conn = 'mongodb://localhost:27017'
+client = pymongo.MongoClient(conn)
+
+# Define database and collection
+db = client.mars
+collection = db.mars
+
+# Dictionary to be inserted as a MongoDB document
+collection.insert_one(mars_data)
