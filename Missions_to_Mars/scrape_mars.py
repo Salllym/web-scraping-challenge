@@ -16,15 +16,10 @@ import pymongo
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 
-#MAC Users
-# https://splinter.readthedocs.io/en/latest/drivers/chrome.html
-!which chromedriver
+def init_browser():
+	executable_path = {"executable_path":"webdriver/chromedriver"}
+	return Browser("chrome", **executable_path, headless = False)
 
-# @NOTE: Replace the path with your actual path to the chromedriver
-executable_path = {'executable_path': ChromeDriverManager().install()}
-browser = Browser('chrome', **executable_path, headless=False)
-
-# NASA Mars News
 def mars_news(): 
     # connect to NASA Mars news Site
     url = 'https://redplanetscience.com/'
@@ -44,9 +39,13 @@ def mars_news():
     article = soup.find("div", class_ = "list_text")
     news_title = article.find("div", class_="content_title").text
     news_p = article.find("div", class_="article_teaser_body").text
+
+#     print(f'------------------------------------------------')
+#     print(f'TITLE: {news_title}')
+#     print(f'------------------------------------------------')
+#     print(f'PARAGRAPH: {news_p}')
      
     return news_title, news_p
-mars_news()
 
 
 # JPL Mars Space Images 
@@ -72,10 +71,8 @@ def featured_image():
     # Need more info to find image url
     image_url = browser.find_by_css("img.fancybox-image")["src"]
     return image_url
-featured_image()
 
 
-# Mars Facts
 def mars_facts():
     # Visit the Mars Facts webpage
     # Set URL
@@ -90,9 +87,8 @@ def mars_facts():
     mars_facts_df.columns=["Planet Profile", "Value"]
     mars_facts_df.set_index("Planet Profile", inplace=True)
     mars_facts_html_table = mars_facts_df.to_html()
-    mars_facts_html_table.replace('\n','')
+    mars_facts_html_table = mars_facts_html_table.replace('\n','')
     return mars_facts_html_table
-mars_facts()
 
 
 # Mars Hemispheres
@@ -134,7 +130,6 @@ def hemisphere_image_urls():
 
     # Use a Python dictionary to store the data using the keys `img_url` and `title`
     return hemisphere_img_urls
-hemisphere_image_urls()
 
 
 # Scrape All
@@ -154,25 +149,8 @@ def scrape_all():
         "featured_image": featured_image(),
         "mars_facts": mars_facts(),
         "hemispheres": hemisphere_image_urls()}
-
+    
+    browser.quit()
     return mars_data
-mars_data = scrape_all() 
-mars_data
 
 
-# Initialize PyMongo to work with MongoDBs
-conn = 'mongodb://localhost:27017'
-client = pymongo.MongoClient(conn)
-
-# Define database and collection
-db = client.mars
-collection = db.mars
-
-# Dictionary to be inserted as a MongoDB document
-collection.insert_one(mars_data)
-
-# Display items in MongoDB collection
-listings = db.mars.find()
-
-for listing in listings:
-    print(listing)
